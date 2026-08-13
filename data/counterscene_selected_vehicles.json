@@ -1,0 +1,1446 @@
+{
+  "schema_version": 1,
+  "description": "Precomputed CounterScene vehicle selections and guidance targets. Vehicle-selection implementation is intentionally not included.",
+  "selected_vehicles": {
+    "scene-0003": {
+      "scene_name": "scene-0003",
+      "ego_idx": 0,
+      "adv_idx": 5,
+      "conflict_point": [
+        276.78432859794384,
+        911.7612992180744
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 5,
+      "danger_score": 0.25194266733242127,
+      "guidance_weight": -90.07770669329685,
+      "total_horizon": 50
+    },
+    "scene-0012": {
+      "scene_name": "scene-0012",
+      "ego_idx": 0,
+      "adv_idx": 2,
+      "conflict_point": [
+        1191.7264676870457,
+        470.91495182666256
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 19.16570022356653,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0013": {
+      "scene_name": "scene-0013",
+      "ego_idx": 0,
+      "adv_idx": 2,
+      "conflict_point": [
+        1258.0346521084334,
+        639.657908515272
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 13.87935423095574,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0016": {
+      "scene_name": "scene-0016",
+      "ego_idx": 0,
+      "adv_idx": 2,
+      "conflict_point": [
+        855.1943860147508,
+        1647.0578908336572
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 33,
+      "danger_score": 3.5135295674617253,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0018": {
+      "scene_name": "scene-0018",
+      "ego_idx": 0,
+      "adv_idx": 5,
+      "conflict_point": [
+        403.53151534257586,
+        1103.8465766543504
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 9.632190578960442,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0035": {
+      "scene_name": "scene-0035",
+      "ego_idx": 0,
+      "adv_idx": 7,
+      "conflict_point": [
+        277.8967771774149,
+        796.4261539446809
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 4,
+      "adv_arrival_time": 49,
+      "danger_score": 4.4153769276680235,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0038": {
+      "scene_name": "scene-0038",
+      "ego_idx": 0,
+      "adv_idx": 1,
+      "conflict_point": [
+        988.8978360678068,
+        635.7161839800201
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 12,
+      "adv_arrival_time": 43,
+      "danger_score": 2.0110670237346286,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0039": {
+      "scene_name": "scene-0039",
+      "ego_idx": 0,
+      "adv_idx": 11,
+      "conflict_point": [
+        327.1386894137149,
+        996.8706967478447
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 12,
+      "adv_arrival_time": 33,
+      "danger_score": 4.5345709402358345,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0092": {
+      "scene_name": "scene-0092",
+      "ego_idx": 0,
+      "adv_idx": 11,
+      "conflict_point": [
+        2177.8752546589385,
+        788.2109085531358
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 15.211816539496423,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0093": {
+      "scene_name": "scene-0093",
+      "ego_idx": 0,
+      "adv_idx": 31,
+      "conflict_point": [
+        1515.1493091644109,
+        855.1228321804233
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 31.212488287839744,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0095": {
+      "scene_name": "scene-0095",
+      "ego_idx": 0,
+      "adv_idx": 1,
+      "conflict_point": [
+        1318.8894242348601,
+        1042.4771178988838
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 23,
+      "adv_arrival_time": 3,
+      "danger_score": 3.442291983857074,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0096": {
+      "scene_name": "scene-0096",
+      "ego_idx": 0,
+      "adv_idx": 8,
+      "conflict_point": [
+        1294.6736952128867,
+        1065.4358951218587
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 48,
+      "danger_score": 14.32297707479016,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0097": {
+      "scene_name": "scene-0097",
+      "ego_idx": 0,
+      "adv_idx": 3,
+      "conflict_point": [
+        1194.4666870865833,
+        1126.1888516462059
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 48,
+      "danger_score": 2.510582848581355,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0098": {
+      "scene_name": "scene-0098",
+      "ego_idx": 0,
+      "adv_idx": 8,
+      "conflict_point": [
+        1105.0508708154844,
+        1182.0536433244865
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 1,
+      "adv_arrival_time": 2,
+      "danger_score": 34.22743186724431,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0099": {
+      "scene_name": "scene-0099",
+      "ego_idx": 0,
+      "adv_idx": 16,
+      "conflict_point": [
+        725.801890335567,
+        1435.0824796290146
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 12.299072866209077,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0100": {
+      "scene_name": "scene-0100",
+      "ego_idx": 0,
+      "adv_idx": 2,
+      "conflict_point": [
+        576.9157950876522,
+        1513.909247519937
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 3,
+      "adv_arrival_time": 38,
+      "danger_score": 0.918054145941838,
+      "guidance_weight": -116.72216583767351,
+      "total_horizon": 50
+    },
+    "scene-0101": {
+      "scene_name": "scene-0101",
+      "ego_idx": 0,
+      "adv_idx": 1,
+      "conflict_point": [
+        576.2093655388928,
+        1519.1813442586517
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 24.844658109910505,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0102": {
+      "scene_name": "scene-0102",
+      "ego_idx": 0,
+      "adv_idx": 11,
+      "conflict_point": [
+        454.7981528994639,
+        1737.396765616632
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 8,
+      "adv_arrival_time": 3,
+      "danger_score": 2.8173000857716652,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0103": {
+      "scene_name": "scene-0103",
+      "ego_idx": 0,
+      "adv_idx": 11,
+      "conflict_point": [
+        655.2178067218584,
+        1607.990198762164
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 5.308231543843604,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0104": {
+      "scene_name": "scene-0104",
+      "ego_idx": 0,
+      "adv_idx": 22,
+      "conflict_point": [
+        784.0816590427194,
+        1497.9009894399144
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 27.075691844573853,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0105": {
+      "scene_name": "scene-0105",
+      "ego_idx": 0,
+      "adv_idx": 24,
+      "conflict_point": [
+        939.3186563907202,
+        1383.5599737497655
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 43,
+      "danger_score": 7.648639760151564,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0106": {
+      "scene_name": "scene-0106",
+      "ego_idx": 0,
+      "adv_idx": 12,
+      "conflict_point": [
+        1018.8053733591895,
+        1367.3550316619232
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 3,
+      "adv_arrival_time": 38,
+      "danger_score": 1.7903313183421137,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0107": {
+      "scene_name": "scene-0107",
+      "ego_idx": 0,
+      "adv_idx": 7,
+      "conflict_point": [
+        1173.7839429393898,
+        1399.0748266075193
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 37,
+      "adv_arrival_time": 18,
+      "danger_score": 3.36523371892618,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0108": {
+      "scene_name": "scene-0108",
+      "ego_idx": 0,
+      "adv_idx": 3,
+      "conflict_point": [
+        1655.8789222187497,
+        1271.4176765127816
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 26,
+      "adv_arrival_time": 38,
+      "danger_score": 0.8546690432482625,
+      "guidance_weight": -114.18676172993051,
+      "total_horizon": 50
+    },
+    "scene-0109": {
+      "scene_name": "scene-0109",
+      "ego_idx": 0,
+      "adv_idx": 15,
+      "conflict_point": [
+        1793.0963428546188,
+        1200.8496551734984
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 8,
+      "danger_score": 1.1133599310806634,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0110": {
+      "scene_name": "scene-0110",
+      "ego_idx": 0,
+      "adv_idx": 1,
+      "conflict_point": [
+        1981.7743327465946,
+        1036.7574869726986
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 20.560507947344952,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0221": {
+      "scene_name": "scene-0221",
+      "ego_idx": 0,
+      "adv_idx": 2,
+      "conflict_point": [
+        515.6629841769903,
+        1368.1941640042892
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 38,
+      "adv_arrival_time": 18,
+      "danger_score": 0.08645152590588144,
+      "guidance_weight": -83.45806103623526,
+      "total_horizon": 50
+    },
+    "scene-0268": {
+      "scene_name": "scene-0268",
+      "ego_idx": 0,
+      "adv_idx": 1,
+      "conflict_point": [
+        694.3184225800426,
+        975.7224266403318
+      ],
+      "conflict_type": "following",
+      "sub_type": "rear_approach",
+      "ego_arrival_time": 16,
+      "adv_arrival_time": 49,
+      "danger_score": 0.37830940894879533,
+      "guidance_weight": -71.34928226846387,
+      "total_horizon": 50
+    },
+    "scene-0269": {
+      "scene_name": "scene-0269",
+      "ego_idx": 0,
+      "adv_idx": 4,
+      "conflict_point": [
+        648.0498738297156,
+        1127.946793818503
+      ],
+      "conflict_type": "following",
+      "sub_type": "rear_approach",
+      "ego_arrival_time": 8,
+      "adv_arrival_time": 40,
+      "danger_score": 0.7835908231882756,
+      "guidance_weight": -83.50772469564826,
+      "total_horizon": 50
+    },
+    "scene-0271": {
+      "scene_name": "scene-0271",
+      "ego_idx": 0,
+      "adv_idx": 1,
+      "conflict_point": [
+        534.0295313450374,
+        1698.27604129625
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 28,
+      "danger_score": 2.0427871852052943,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0272": {
+      "scene_name": "scene-0272",
+      "ego_idx": 0,
+      "adv_idx": 1,
+      "conflict_point": [
+        536.2613109942722,
+        1695.098156573478
+      ],
+      "conflict_type": "following",
+      "sub_type": "rear_approach",
+      "ego_arrival_time": 13,
+      "adv_arrival_time": 49,
+      "danger_score": 0.5396883105176735,
+      "guidance_weight": -76.19064931553021,
+      "total_horizon": 50
+    },
+    "scene-0273": {
+      "scene_name": "scene-0273",
+      "ego_idx": 0,
+      "adv_idx": 4,
+      "conflict_point": [
+        458.9717113693414,
+        1621.6584206440627
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 36,
+      "adv_arrival_time": 4,
+      "danger_score": 5.395764884933302,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0274": {
+      "scene_name": "scene-0274",
+      "ego_idx": 0,
+      "adv_idx": 1,
+      "conflict_point": [
+        457.305883003066,
+        1287.636333437163
+      ],
+      "conflict_type": "following",
+      "sub_type": "rear_approach",
+      "ego_arrival_time": 4,
+      "adv_arrival_time": 27,
+      "danger_score": 1.1694477509501366,
+      "guidance_weight": -90.0,
+      "total_horizon": 50
+    },
+    "scene-0275": {
+      "scene_name": "scene-0275",
+      "ego_idx": 0,
+      "adv_idx": 2,
+      "conflict_point": [
+        386.1322854940729,
+        1140.6521701755823
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 15.178214704463606,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0276": {
+      "scene_name": "scene-0276",
+      "ego_idx": 0,
+      "adv_idx": 10,
+      "conflict_point": [
+        371.57630351004184,
+        1117.4441571224293
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 36,
+      "adv_arrival_time": 33,
+      "danger_score": 9.066608594689203,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0277": {
+      "scene_name": "scene-0277",
+      "ego_idx": 0,
+      "adv_idx": 1,
+      "conflict_point": [
+        326.5672210882826,
+        977.4418022118787
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 7,
+      "adv_arrival_time": 49,
+      "danger_score": 1.9598014018861596,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0329": {
+      "scene_name": "scene-0329",
+      "ego_idx": 0,
+      "adv_idx": 13,
+      "conflict_point": [
+        1732.387699778385,
+        786.3647405244765
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 4.469790762710229,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0330": {
+      "scene_name": "scene-0330",
+      "ego_idx": 0,
+      "adv_idx": 10,
+      "conflict_point": [
+        2091.1648307272917,
+        942.7604597724802
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 43,
+      "danger_score": 5.854993503549702,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0331": {
+      "scene_name": "scene-0331",
+      "ego_idx": 0,
+      "adv_idx": 38,
+      "conflict_point": [
+        1827.1090007160824,
+        1151.778840603508
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 23,
+      "danger_score": 2.702007657416087,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0332": {
+      "scene_name": "scene-0332",
+      "ego_idx": 0,
+      "adv_idx": 46,
+      "conflict_point": [
+        2289.5483136806733,
+        866.3853637947623
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 7.274556189395768,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0519": {
+      "scene_name": "scene-0519",
+      "ego_idx": 0,
+      "adv_idx": 22,
+      "conflict_point": [
+        1274.0699184803789,
+        1485.8523549886745
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 38,
+      "danger_score": 4.522780537235819,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0520": {
+      "scene_name": "scene-0520",
+      "ego_idx": 0,
+      "adv_idx": 11,
+      "conflict_point": [
+        1404.7374526477024,
+        1424.0638141167124
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 12.080519092200992,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0521": {
+      "scene_name": "scene-0521",
+      "ego_idx": 0,
+      "adv_idx": 23,
+      "conflict_point": [
+        1520.4261458355213,
+        1358.2271982917855
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 2,
+      "adv_arrival_time": 46,
+      "danger_score": 3.582692951311729,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0522": {
+      "scene_name": "scene-0522",
+      "ego_idx": 0,
+      "adv_idx": 21,
+      "conflict_point": [
+        1674.6112914100627,
+        1277.7174653536404
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 14.659636318789964,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0523": {
+      "scene_name": "scene-0523",
+      "ego_idx": 0,
+      "adv_idx": 7,
+      "conflict_point": [
+        1797.3280519232098,
+        1196.0461024141186
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 12.037779264231839,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0524": {
+      "scene_name": "scene-0524",
+      "ego_idx": 0,
+      "adv_idx": 4,
+      "conflict_point": [
+        1876.4190415275468,
+        1112.2257318073803
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 23,
+      "adv_arrival_time": 23,
+      "danger_score": 18.47489042164254,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0552": {
+      "scene_name": "scene-0552",
+      "ego_idx": 0,
+      "adv_idx": 7,
+      "conflict_point": [
+        1937.2280406882624,
+        863.5500188198863
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 48,
+      "adv_arrival_time": 2,
+      "danger_score": 1.236740464457256,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0553": {
+      "scene_name": "scene-0553",
+      "ego_idx": 0,
+      "adv_idx": 13,
+      "conflict_point": [
+        1310.0986039629743,
+        1044.84834563588
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 28,
+      "danger_score": 3.612839444695884,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0554": {
+      "scene_name": "scene-0554",
+      "ego_idx": 0,
+      "adv_idx": 7,
+      "conflict_point": [
+        1292.6219015334673,
+        1049.112850359409
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 18,
+      "adv_arrival_time": 49,
+      "danger_score": 0.632426240005851,
+      "guidance_weight": -105.29704960023403,
+      "total_horizon": 50
+    },
+    "scene-0555": {
+      "scene_name": "scene-0555",
+      "ego_idx": 0,
+      "adv_idx": 5,
+      "conflict_point": [
+        1299.4348251239778,
+        1045.155759106267
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 30,
+      "adv_arrival_time": 49,
+      "danger_score": 8.539033097732565,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0556": {
+      "scene_name": "scene-0556",
+      "ego_idx": 0,
+      "adv_idx": 26,
+      "conflict_point": [
+        1238.93429550106,
+        957.0598440071418
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 21.432435609942786,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0557": {
+      "scene_name": "scene-0557",
+      "ego_idx": 0,
+      "adv_idx": 7,
+      "conflict_point": [
+        1237.9427067943311,
+        968.2881039111558
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 9.430576404594435,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0558": {
+      "scene_name": "scene-0558",
+      "ego_idx": 0,
+      "adv_idx": 21,
+      "conflict_point": [
+        1248.1742265323126,
+        1003.0713731890557
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 8.050179601359623,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0559": {
+      "scene_name": "scene-0559",
+      "ego_idx": 0,
+      "adv_idx": 2,
+      "conflict_point": [
+        1392.5884571738948,
+        1167.5065477119033
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 12.955072447315953,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0560": {
+      "scene_name": "scene-0560",
+      "ego_idx": 0,
+      "adv_idx": 16,
+      "conflict_point": [
+        1438.808236600511,
+        1228.42010532846
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 18,
+      "adv_arrival_time": 18,
+      "danger_score": 7.010211007401813,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0561": {
+      "scene_name": "scene-0561",
+      "ego_idx": 0,
+      "adv_idx": 18,
+      "conflict_point": [
+        1431.6962400410207,
+        1205.6220853814489
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 7.94513186160492,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0562": {
+      "scene_name": "scene-0562",
+      "ego_idx": 0,
+      "adv_idx": 9,
+      "conflict_point": [
+        1341.8821988381656,
+        1302.1735562500817
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 5,
+      "adv_arrival_time": 3,
+      "danger_score": 9.720478693762113,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0563": {
+      "scene_name": "scene-0563",
+      "ego_idx": 0,
+      "adv_idx": 8,
+      "conflict_point": [
+        1226.2327001648146,
+        1365.0414278637736
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 14,
+      "adv_arrival_time": 49,
+      "danger_score": 2.3906763785257663,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0564": {
+      "scene_name": "scene-0564",
+      "ego_idx": 0,
+      "adv_idx": 9,
+      "conflict_point": [
+        1211.5553401948546,
+        1384.4547892883127
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 28,
+      "adv_arrival_time": 49,
+      "danger_score": 0.06350354538336912,
+      "guidance_weight": -82.54014181533476,
+      "total_horizon": 50
+    },
+    "scene-0565": {
+      "scene_name": "scene-0565",
+      "ego_idx": 0,
+      "adv_idx": 17,
+      "conflict_point": [
+        1211.3741275370753,
+        1451.9110670008172
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 43,
+      "danger_score": 5.1809429594639775,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0625": {
+      "scene_name": "scene-0625",
+      "ego_idx": 0,
+      "adv_idx": 2,
+      "conflict_point": [
+        1576.577471743877,
+        1319.1055070238722
+      ],
+      "conflict_type": "following",
+      "sub_type": "lead_braking",
+      "ego_arrival_time": 4,
+      "adv_arrival_time": 23,
+      "danger_score": 1.1960441929546346,
+      "guidance_weight": -90.0,
+      "total_horizon": 50
+    },
+    "scene-0626": {
+      "scene_name": "scene-0626",
+      "ego_idx": 0,
+      "adv_idx": 3,
+      "conflict_point": [
+        1731.8417172467882,
+        1247.6311369994546
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 48,
+      "danger_score": 10.780942653786802,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0627": {
+      "scene_name": "scene-0627",
+      "ego_idx": 0,
+      "adv_idx": 4,
+      "conflict_point": [
+        1833.6184093118557,
+        1249.2376297011924
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 14.750065940943824,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0629": {
+      "scene_name": "scene-0629",
+      "ego_idx": 0,
+      "adv_idx": 4,
+      "conflict_point": [
+        2030.7922182696454,
+        1204.2184128778654
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 0.5580144965426417,
+      "guidance_weight": -102.32057986170567,
+      "total_horizon": 50
+    },
+    "scene-0630": {
+      "scene_name": "scene-0630",
+      "ego_idx": 0,
+      "adv_idx": 1,
+      "conflict_point": [
+        2241.58281117999,
+        1085.9187940574266
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 3.9947470845350175,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0632": {
+      "scene_name": "scene-0632",
+      "ego_idx": 0,
+      "adv_idx": 7,
+      "conflict_point": [
+        2318.594090421665,
+        1010.373279712466
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 10.176057991907053,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0633": {
+      "scene_name": "scene-0633",
+      "ego_idx": 0,
+      "adv_idx": 8,
+      "conflict_point": [
+        2125.928679602142,
+        1113.221934520477
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 38,
+      "adv_arrival_time": 33,
+      "danger_score": 8.426477597070978,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0634": {
+      "scene_name": "scene-0634",
+      "ego_idx": 0,
+      "adv_idx": 39,
+      "conflict_point": [
+        2022.6082828279295,
+        1149.4055514667143
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 13.599282835614401,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0636": {
+      "scene_name": "scene-0636",
+      "ego_idx": 0,
+      "adv_idx": 2,
+      "conflict_point": [
+        1973.331751872346,
+        1053.4691457674942
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 10,
+      "adv_arrival_time": 28,
+      "danger_score": 2.291199126951059,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0637": {
+      "scene_name": "scene-0637",
+      "ego_idx": 0,
+      "adv_idx": 28,
+      "conflict_point": [
+        1589.387181465866,
+        1316.149894104384
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 18.20473873136953,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0638": {
+      "scene_name": "scene-0638",
+      "ego_idx": 0,
+      "adv_idx": 10,
+      "conflict_point": [
+        1486.1470346458966,
+        1376.619613700696
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 48,
+      "adv_arrival_time": 49,
+      "danger_score": 7.668188332036722,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0775": {
+      "scene_name": "scene-0775",
+      "ego_idx": 0,
+      "adv_idx": 3,
+      "conflict_point": [
+        1302.4176760682567,
+        897.5214665028657
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 18,
+      "adv_arrival_time": 15,
+      "danger_score": 10.20637783954657,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0777": {
+      "scene_name": "scene-0777",
+      "ego_idx": 0,
+      "adv_idx": 1,
+      "conflict_point": [
+        1303.4331804084993,
+        898.3880627339308
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 48,
+      "adv_arrival_time": 3,
+      "danger_score": 1.7570505637408798,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0780": {
+      "scene_name": "scene-0780",
+      "ego_idx": 0,
+      "adv_idx": 3,
+      "conflict_point": [
+        1280.8516774579775,
+        1039.9380698089494
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 18,
+      "adv_arrival_time": 49,
+      "danger_score": 1.0786363568480217,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0781": {
+      "scene_name": "scene-0781",
+      "ego_idx": 0,
+      "adv_idx": 27,
+      "conflict_point": [
+        1280.5991624491023,
+        1029.0461063996277
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 8,
+      "adv_arrival_time": 13,
+      "danger_score": 5.83813758047289,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0782": {
+      "scene_name": "scene-0782",
+      "ego_idx": 0,
+      "adv_idx": 21,
+      "conflict_point": [
+        1272.6809048963205,
+        1042.5626284907207
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 11.659548665937793,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0783": {
+      "scene_name": "scene-0783",
+      "ego_idx": 0,
+      "adv_idx": 6,
+      "conflict_point": [
+        1387.2145346901407,
+        1158.1860775627333
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 22.596616386565024,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0784": {
+      "scene_name": "scene-0784",
+      "ego_idx": 0,
+      "adv_idx": 17,
+      "conflict_point": [
+        1442.721074618301,
+        1211.0229386607234
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 0.509169987956984,
+      "guidance_weight": -100.36679951827935,
+      "total_horizon": 50
+    },
+    "scene-0904": {
+      "scene_name": "scene-0904",
+      "ego_idx": 0,
+      "adv_idx": 10,
+      "conflict_point": [
+        1139.0231907572108,
+        1561.4433805559672
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 41,
+      "adv_arrival_time": 43,
+      "danger_score": 8.61815582909324,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0905": {
+      "scene_name": "scene-0905",
+      "ego_idx": 0,
+      "adv_idx": 13,
+      "conflict_point": [
+        1266.7902090483913,
+        1500.37233001437
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 15.143743556202724,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0906": {
+      "scene_name": "scene-0906",
+      "ego_idx": 0,
+      "adv_idx": 13,
+      "conflict_point": [
+        1432.575645544524,
+        1406.9612325435173
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 19.056961971318106,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0907": {
+      "scene_name": "scene-0907",
+      "ego_idx": 0,
+      "adv_idx": 7,
+      "conflict_point": [
+        1489.9325431451684,
+        1347.6820422946275
+      ],
+      "conflict_type": "following",
+      "sub_type": "rear_approach",
+      "ego_arrival_time": 4,
+      "adv_arrival_time": 48,
+      "danger_score": 0.31419242468476943,
+      "guidance_weight": -69.42577274054308,
+      "total_horizon": 50
+    },
+    "scene-0908": {
+      "scene_name": "scene-0908",
+      "ego_idx": 0,
+      "adv_idx": 9,
+      "conflict_point": [
+        1464.328237855881,
+        1294.2620932249015
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 33,
+      "danger_score": 2.2621288732530096,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0909": {
+      "scene_name": "scene-0909",
+      "ego_idx": 0,
+      "adv_idx": 11,
+      "conflict_point": [
+        1389.3480455472368,
+        1162.8354505105567
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 38,
+      "adv_arrival_time": 3,
+      "danger_score": 4.53187065686365,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0910": {
+      "scene_name": "scene-0910",
+      "ego_idx": 0,
+      "adv_idx": 15,
+      "conflict_point": [
+        1311.090004463992,
+        1047.521006748189
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 11.990569961346273,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0911": {
+      "scene_name": "scene-0911",
+      "ego_idx": 0,
+      "adv_idx": 14,
+      "conflict_point": [
+        1206.232359642253,
+        960.3024257823328
+      ],
+      "conflict_type": "following",
+      "sub_type": "lead_braking",
+      "ego_arrival_time": 22,
+      "adv_arrival_time": 49,
+      "danger_score": 1.7159969372264396,
+      "guidance_weight": -90.0,
+      "total_horizon": 50
+    },
+    "scene-0912": {
+      "scene_name": "scene-0912",
+      "ego_idx": 0,
+      "adv_idx": 3,
+      "conflict_point": [
+        925.4624086086963,
+        633.2259022716282
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 48,
+      "adv_arrival_time": 8,
+      "danger_score": 2.0916182722446073,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0913": {
+      "scene_name": "scene-0913",
+      "ego_idx": 0,
+      "adv_idx": 2,
+      "conflict_point": [
+        690.3967720484159,
+        620.3674968779133
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 35,
+      "danger_score": 11.095804549534106,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0914": {
+      "scene_name": "scene-0914",
+      "ego_idx": 0,
+      "adv_idx": 8,
+      "conflict_point": [
+        452.5622848533527,
+        791.855614656683
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 46,
+      "adv_arrival_time": 43,
+      "danger_score": 8.616666930622516,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    },
+    "scene-0915": {
+      "scene_name": "scene-0915",
+      "ego_idx": 0,
+      "adv_idx": 11,
+      "conflict_point": [
+        632.9902232664347,
+        1419.4860468492798
+      ],
+      "conflict_type": "intersection",
+      "sub_type": null,
+      "ego_arrival_time": 49,
+      "adv_arrival_time": 49,
+      "danger_score": 16.508246727029796,
+      "guidance_weight": -120.0,
+      "total_horizon": 50
+    }
+  }
+}

@@ -1,0 +1,25 @@
+name: counterscene
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.8
+  - pip=24.0
+  - setuptools
+  - pytorch=1.13.1
+  - torchvision=0.14.1
+  - torchtext=0.14.1
+  - pytorch-cuda=11.7
+  - numpy=1.23.4
+  - pip:
+      - pytorch-lightning==1.8.3.post0
+      - protobuf==3.20.1
+      - imageio==2.9.0
+      - imageio-ffmpeg==0.4.9
+      - einops==0.6.0
+      - casadi
+      - h5py
+      - pyemd
+      - wandb
+      - pyyaml

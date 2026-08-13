@@ -1,0 +1,8 @@
+CounterScene
+Copyright 2026 CounterScene authors
+
+This product includes software developed for CCDiff, originally copyright
+Cruise LLC and licensed under the Apache License, Version 2.0.
+
+The third_party/tbsim directory is separately licensed under the NVIDIA Source
+Code License-NC. See THIRD_PARTY_NOTICES.md and third_party/tbsim/LICENSE.

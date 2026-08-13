@@ -1,0 +1,46 @@
+# OS and editors
+.DS_Store
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+build/
+dist/
+*.egg-info/
+.coverage
+.pytest_cache/
+.mypy_cache/
+
+# Runtime outputs and weights
+*.log
+*.mp4
+checkpoints/
+ckpt/
+experiments/
+figures/
+logs/
+out/
+results/
+visualizations/
+videos/
+wandb/
+*trained_models*/
+debug_control*/
+drivesim_results/
+l5_results/
+new_results*/
+nusc_results*/
+nuplan_results/
+
+# Datasets, caches, and bootstrap-managed dependencies
+data/nuscenes/
+gt_files/
+unified_data_cache/
+third_party/Pplan/
+third_party/trajdata/
+
+# Local secrets
+openai_key.py
