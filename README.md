@@ -45,11 +45,15 @@ This repository includes:
 - the customized tbsim runtime used by CounterScene;
 - 90 published scene-local ego/adversary choices in
   `data/counterscene_selected_vehicles.json`;
-- lightweight artifact, configuration, CIG, and guidance tests.
+- offline conflict mining -- adversary selection and guidance targets, per
+  paper appendix A.2 (`ccdiff/counterscene/selection.py`,
+  `scripts/build_selected_vehicles.py`);
+- lightweight artifact, configuration, CIG, guidance, and selection tests.
 
-The vehicle-selection implementation is intentionally not included. The
-published vehicle pairs and all targets needed by the evaluation pipeline are
-provided as a human-readable, schema-validated JSON artifact.
+The released artifact was produced by the authors' own mining code rather than by
+the implementation here. The published vehicle pairs and all targets needed by the
+evaluation pipeline are provided as a human-readable, schema-validated JSON
+artifact, and remain the default input for reproducing the paper's numbers.
 
 ## Installation
 
@@ -216,6 +220,25 @@ bash scripts/run_eval.sh
 See [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) for the artifact schema,
 evaluation protocol, V3 ablations, and checkpoint compatibility notes.
 
+### Regenerating selections
+
+`scripts/build_selected_vehicles.py` re-derives ego/adversary pairs and guidance
+targets from a trajdata cache, implementing the offline conflict mining of paper
+appendix A.2 (equations 10-17):
+
+```bash
+python scripts/build_selected_vehicles.py \
+  --cache_dir "$TRAJDATA_CACHE_DIR" --env_name nusc_trainval \
+  --output selected_vehicles.json \
+  --compare_to data/counterscene_selected_vehicles.json
+```
+
+Every constant in `SelectionConfig` is taken from the paper. The mined targets
+are not bit-identical to the released artifact -- see
+[docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) for measured agreement and
+for the agent-index caveat that governs whether a regenerated artifact can be
+fed to `run_eval.sh`.
+
 ## Qualitative example
 
 <div align="center">
@@ -228,12 +251,12 @@ available in the paper.
 ## Repository structure
 
 ```text
-ccdiff/counterscene/       artifact validation, CIG features, V3 configuration
+ccdiff/counterscene/       artifact validation, CIG features, V3 configuration, selection
 ccdiff/models/             CCDiff world model with CounterScene CIG support
 ccdiff/examples/           training, evaluation, and result parsing
 data/                      published selected-vehicle artifact
 docs/                      reproducibility documentation
-scripts/                   installation, training, and evaluation helpers
+scripts/                   installation, training, evaluation, and selection helpers
 tests/                     focused smoke and unit tests
 third_party/tbsim/         customized tbsim runtime
 ```

@@ -26,8 +26,12 @@ def algo_factory(config: ExperimentConfig, modality_shapes: dict):
     """
     algo_config = config.algo
     algo_name = algo_config.name
-    if algo_name == "ccdiff":
+    # "counterscene" (CounterSceneConfig) is a CCDiffConfig subclass that only
+    # changes algo_config fields (CIG edge layout, motion_dist, soft gate); the
+    # same CCDiffTrafficModel class handles both, branching on registered_name
+    # where needed. Without this, "trajdata_nusc_counterscene" can never train.
+    if algo_name in ("ccdiff", "counterscene"):
         algo = CCDiffTrafficModel(algo_config=algo_config, modality_shapes=modality_shapes, registered_name=config.registered_name)
     else:
-        raise NotImplementedError("{} is not a valid algorithm" % algo_name)
+        raise NotImplementedError("{} is not a valid algorithm".format(algo_name))
     return algo

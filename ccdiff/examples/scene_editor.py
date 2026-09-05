@@ -234,7 +234,10 @@ def run_scene_editor(eval_cfg, save_cfg, data_to_disk, render_to_video, render_t
         print('Starting frames in current scenes:', start_frame_index)
         for ei in range(eval_cfg.num_sim_per_scene):
             guidance_config = None   # for the current batch of scenes
-            constraint_config = None # for the current batch of scenes
+            # guided_rollout (vendored) does `len(constraint_config) > 0` unconditionally;
+            # only the "config" editing source below ever assigns a real value, so every
+            # other source (including "conflict") must still hand it a list, not None.
+            constraint_config = []   # for the current batch of scenes
 
             cur_start_frames = [scene_start[ei] for scene_start in start_frame_index]
             # double check all scenes are valid at the current start step

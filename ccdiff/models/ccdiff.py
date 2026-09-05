@@ -1525,7 +1525,14 @@ class CCDiffuserModel(nn.Module):
         if any(guide_losses):
             print('===== GUIDANCE LOSSES ======')
             for k,v in guide_losses.items():
-                if torch.isnan(v).any() or len(v) == 0:
+                # guide_losses pads agents outside a guidance's agt_mask with NaN by
+                # design (see compute_guidance_loss's "indiv_loss" comment), so any
+                # guidance restricted to a subset of agents -- e.g. CounterScene's
+                # --part_control ego/adversary pair -- always has some NaN entries.
+                # `.any()` here always fires for exactly that case and hides the real
+                # mean behind a cosmetic "nan" print; only report nan when nanmean
+                # itself would be (i.e. every entry is NaN).
+                if torch.isnan(v).all() or len(v) == 0:
                     v_mean = np.nan
                 else:
                     v_mean = np.nanmean(v.cpu())
