@@ -25,7 +25,77 @@ from tbsim.utils.trajdata_utils import set_global_trajdata_batch_env, set_global
 from ccdiff.algos.factory import algo_factory
 
 os.environ["WANDB_DISABLE_CODE"] = "True"
-def main(cfg, auto_remove_exp_dir=False, debug=False):
+
+# Table 6's recipe (100,000 steps, checkpointed every 10,000) is calibrated at
+# "Configured batch size 4". trajdata_nusc_counterscene's registered batch_size
+# is tuned per-GPU instead (see the comment on NuscTrajdataSceneTrainConfig);
+# --auto_schedule (default on) rescales num_steps/save.every_n_steps from these
+# reference points so a different batch_size keeps roughly the same total
+# samples-seen and samples-between-checkpoints, rather than silently training
+# on a different amount of data than intended.
+PAPER_REFERENCE_BATCH_SIZE = 4
+PAPER_REFERENCE_NUM_STEPS = 100000
+PAPER_REFERENCE_SAVE_EVERY_N_STEPS = 10000
+
+
+def _scale_schedule_to_batch_size(cfg):
+    """Rescale num_steps/save.every_n_steps to keep samples-seen ~constant.
+
+    Anchored at (PAPER_REFERENCE_BATCH_SIZE, PAPER_REFERENCE_NUM_STEPS,
+    PAPER_REFERENCE_SAVE_EVERY_N_STEPS); e.g. batch_size=12 -> ~33333 steps,
+    checkpointed every ~3333 steps, instead of 100000/10000 at batch_size=4.
+    save.every_n_steps is additionally floored just above validation.every_n_steps
+    to keep train.py's own checkpointing-frequency assertion satisfied.
+    """
+    batch_size = cfg.train.training.batch_size
+    scale = PAPER_REFERENCE_BATCH_SIZE / float(batch_size)
+    num_steps = max(1, round(PAPER_REFERENCE_NUM_STEPS * scale))
+    save_every = max(1, round(PAPER_REFERENCE_SAVE_EVERY_N_STEPS * scale))
+    save_every = max(save_every, cfg.train.validation.every_n_steps + 1)
+    with cfg.train.training.unlocked():
+        cfg.train.training.num_steps = num_steps
+    with cfg.train.save.unlocked():
+        cfg.train.save.every_n_steps = save_every
+    print(
+        "auto_schedule: batch_size={} (reference {} @ {} steps / save every {}) "
+        "-> num_steps={} save.every_n_steps={}".format(
+            batch_size, PAPER_REFERENCE_BATCH_SIZE, PAPER_REFERENCE_NUM_STEPS,
+            PAPER_REFERENCE_SAVE_EVERY_N_STEPS, num_steps, save_every,
+        )
+    )
+
+
+def _resolve_resume_checkpoint(path):
+    """Accept an exact .ckpt file, or a directory to search for the latest one.
+
+    Directory search looks for the highest "iterN" step number encoded in the
+    filename (matching train.py's own checkpoint naming); if no filename
+    parses, falls back to the most recently modified .ckpt found.
+    """
+    import glob
+    import re
+
+    if os.path.isfile(path):
+        return os.path.abspath(path)
+    if not os.path.isdir(path):
+        raise FileNotFoundError("--resume_from: no such file or directory: {}".format(path))
+
+    candidates = glob.glob(os.path.join(path, "**", "*.ckpt"), recursive=True)
+    if not candidates:
+        raise FileNotFoundError("--resume_from: no .ckpt files found under {}".format(path))
+
+    def _step_of(ckpt_path):
+        match = re.search(r"iter(\d+)", os.path.basename(ckpt_path))
+        return int(match.group(1)) if match else -1
+
+    if any(_step_of(c) >= 0 for c in candidates):
+        chosen = max(candidates, key=_step_of)
+    else:
+        chosen = max(candidates, key=os.path.getmtime)
+    return os.path.abspath(chosen)
+
+
+def main(cfg, auto_remove_exp_dir=False, debug=False, resume_from=None):
     pl.seed_everything(cfg.seed)
 
     if cfg.env.name == "l5kit":
@@ -146,14 +216,18 @@ def main(cfg, auto_remove_exp_dir=False, debug=False):
         )
         train_callbacks.append(ckpt_rollout_callback)
 
-    # a ckpt monitor to save at fixed interval
+    # a ckpt monitor to save at fixed interval, regardless of any metric --
+    # this is the one checkpoint that always lands on schedule, so it drives
+    # off cfg.train.save.every_n_steps (was hardcoded to 10000, independent of
+    # that config field, which made lowering save.every_n_steps for
+    # crash-resilience a no-op for this callback specifically)
     ckpt_fixed_callback = pl.callbacks.ModelCheckpoint(
         dirpath=ckpt_dir,
         filename="iter{step}",
         auto_insert_metric_name=False,
         save_top_k=-1,
         monitor=None,
-        every_n_train_steps=10000,
+        every_n_train_steps=cfg.train.save.every_n_steps,
         verbose=True,
     )
     train_callbacks.append(ckpt_fixed_callback)
@@ -214,7 +288,9 @@ def main(cfg, auto_remove_exp_dir=False, debug=False):
         # overfit_batches=2
     )
 
-    trainer.fit(model=model, datamodule=datamodule)
+    if resume_from is not None:
+        print("Resuming trainer state (optimizer, global_step, callbacks) from {}".format(resume_from))
+    trainer.fit(model=model, datamodule=datamodule, ckpt_path=resume_from)
 
 
 if __name__ == "__main__":
@@ -269,6 +345,29 @@ if __name__ == "__main__":
         action="store_true",
         help="Whether to automatically remove existing experiment directory of the same name (remember to set this to "
         "True to avoid unexpected stall when launching cloud experiments).",
+    )
+
+    parser.add_argument(
+        "--resume_from",
+        type=str,
+        default=None,
+        help="Resume full trainer state (optimizer, global_step, LR scheduler, callback top-k "
+        "bookkeeping) from a .ckpt file, or a directory to search for the highest-step .ckpt "
+        "under it (e.g. a previous run's root or its checkpoints/ dir). New checkpoints/logs "
+        "still go to a fresh run{N} directory under --output_dir/--name; this only restores "
+        "training progress, not the old run's directory. Mutually exclusive with "
+        "--remove_exp_dir, since that can delete the very checkpoint being resumed from.",
+    )
+
+    parser.add_argument(
+        "--no_auto_schedule",
+        action="store_true",
+        help="By default, training.num_steps and save.every_n_steps are rescaled from the "
+        "registered config's batch_size so a different batch_size still trains on ~the same "
+        "total samples-seen and samples-between-checkpoints as the reference recipe (see "
+        "PAPER_REFERENCE_* above). Pass this to use num_steps/save.every_n_steps exactly as "
+        "configured instead. Auto-scheduling is always skipped under --debug, which already "
+        "sets its own short, fixed intervals.",
     )
 
     parser.add_argument(
@@ -337,5 +436,24 @@ if __name__ == "__main__":
         default_config.eval.pop("l5kit")
         # default_config.eval.pop("trajdata")
 
+    if not args.no_auto_schedule and not args.debug:
+        _scale_schedule_to_batch_size(default_config)
+
+    resume_from = None
+    if args.resume_from is not None:
+        if args.remove_exp_dir:
+            raise ValueError(
+                "--resume_from and --remove_exp_dir are mutually exclusive: "
+                "--remove_exp_dir can wipe the directory the checkpoint you're "
+                "resuming from lives in before training even starts."
+            )
+        resume_from = _resolve_resume_checkpoint(args.resume_from)
+        print("Resolved --resume_from to checkpoint: {}".format(resume_from))
+
     default_config.lock()  # Make config read-only
-    main(default_config, auto_remove_exp_dir=args.remove_exp_dir, debug=args.debug)
+    main(
+        default_config,
+        auto_remove_exp_dir=args.remove_exp_dir,
+        debug=args.debug,
+        resume_from=resume_from,
+    )

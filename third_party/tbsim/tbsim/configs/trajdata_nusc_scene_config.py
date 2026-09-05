@@ -39,11 +39,37 @@ class NuscTrajdataSceneTrainConfig(TrajdataTrainConfig):
 
         # training config
         # assuming 1 sec (10 steps) past, 2 sec (20 steps) future
-        self.training.batch_size = 4 # 100
-        self.training.num_steps = 100000
-        self.training.num_data_workers = 8
+        # batch_size tuned for a single 24GB GPU (e.g. L4, 23034MiB). An isolated
+        # train_step+validation_step probe (validation_step runs full reverse
+        # diffusion sampling at num_eval_samples=10, doubled by use_ema -- far
+        # heavier than a training step alone) peaks at ~17.5GB/22GB reserved for
+        # batch_size=16 -- looked safe, but a real run.py OOM'd around 21.9GB
+        # after several hundred real steps on the full, scene-diverse
+        # nusc_trainval split. That gap is CUDA allocator fragmentation building
+        # up over many steps/shapes, which a short probe on a handful of mini
+        # scenes cannot reproduce. Backed off to 12 (~14.1GB in the same probe,
+        # leaving real margin for that fragmentation) and paired with
+        # PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128 in scripts/run_train.sh.
+        # Re-probe -- and watch nvidia-smi through the first several hundred
+        # steps of any real run -- before raising this again or on other hardware.
+        self.training.batch_size = 12 # 16 # 4 # 100
+        # num_steps/save.every_n_steps below are pre-scaled to this batch_size
+        # from Table 6's reference recipe (batch_size=4, 100000 steps, saved
+        # every 10000) so behavior is sensible even with train.py's
+        # --no_auto_schedule. ccdiff/examples/train.py's
+        # _scale_schedule_to_batch_size / PAPER_REFERENCE_* is the one place
+        # that formula lives (num_steps/save.every_n_steps scaled inversely
+        # with batch_size to hold total samples-seen ~constant); it recomputes
+        # these same values from batch_size=12 by default, so update the
+        # reference constants there, not the arithmetic here, if this ever
+        # needs to change. Checkpointing fairly often still matters even with
+        # --resume_from wired up in train.py: it resumes from whatever the
+        # latest checkpoint was, so a coarser interval just means more
+        # progress re-done after a crash, not none.
+        self.training.num_steps = 33333 # 100000 @ batch_size=4
+        self.training.num_data_workers = 8 # already == os.cpu_count() on this host
 
-        self.save.every_n_steps = 10000
+        self.save.every_n_steps = 3333 # 10000 @ batch_size=4
         self.save.best_k = 10
 
         # validation config
