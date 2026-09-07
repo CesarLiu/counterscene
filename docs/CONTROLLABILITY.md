@@ -71,15 +71,18 @@ tier B : scene-0275 scene-0018 scene-0909 scene-0103 scene-0557 scene-0556 scene
 - `min_ttc` — range over closing speed, minimum over the rollout.
 - `hbr` / `hbr_ego` — hard-braking rate, paper appendix B.2 eq. 29–32 (`a_lon < -3.0 m/s²`).
 
-**How to read them.** A control claim needs all three of:
+**How to read them.** Start with `baseline_s0b`: it bounds run-to-run nondeterminism, and in practice it
+is exactly zero (see Results), which means every guided-vs-`baseline` difference is caused by the
+guidance and no significance threshold is needed. Confirm that first — if it is *not* zero on your setup,
+it becomes the floor everything else must clear. Then a control claim needs:
 
-1. `dev_adv` for a guided arm clearly exceeds `dev_adv` for `baseline_s1` (the divergence you get for
-   free by changing the seed);
-2. `dev_others` stays at or below that floor — the intervention is localised, not a global reshuffle;
-3. the ego's safety margin (`min_clearance`, `min_ttc`) moves in the intended direction and does so
-   more than the seed replicates move it.
+1. `dev_adv` well above that floor — the adversary actually moved;
+2. `dev_others` much smaller than `dev_adv` — the intervention is localised rather than a global
+   reshuffle (it will not be zero; the other agents legitimately react through the world model);
+3. the ego's safety margin (`min_clearance`, `min_ttc`) moving in the intended direction.
 
-`baseline_s0b` bounds the run-to-run nondeterminism; anything at that level is not an effect.
+`baseline_s1` is a *different* seed. Its deviation is chaotic divergence, not measurement noise, so it is
+a useful sense of scale ("how much does the scene move on its own?") but not the floor.
 
 ## Commands
 
@@ -113,8 +116,10 @@ python scripts/score_rollout.py \
   --output results/controllability/metrics_full.json
 ```
 
-The arms are independent and each needs about 3 GB of GPU memory, so they can be run in parallel on a
-24 GB card; `run_controllability.sh` runs them serially by default.
+`run_controllability.sh` runs the arms serially. Do not parallelise all five on one card: per-process
+memory grows with the current scene's agent count, so they fit while the early scenes are small and then
+OOM at different scenes, leaving each arm with a different prefix of the set. Two concurrent arms on a
+24 GB card is safe.
 
 ## Probing a recorded ego
 
