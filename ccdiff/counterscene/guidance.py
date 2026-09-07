@@ -67,8 +67,8 @@ def get_v3_ablation_params(variant: str = "full") -> Dict[str, Any]:
 
 def build_v3_guidance(
     selection: Mapping[str, Any],
-    ego_local_idx: int,
-    adv_local_idx: int,
+    ego_scene_idx: int,
+    adv_scene_idx: int,
     *,
     ablation: str = "full",
     total_horizon: int = 50,
@@ -77,6 +77,12 @@ def build_v3_guidance(
     map_collision_weight: float = 2.0,
 ) -> list:
     """Build one scene's tbsim guidance list.
+
+    ``ego_scene_idx``/``adv_scene_idx`` are the agents' rows *within the
+    trajdata scene* -- the same space as the published ``ego_idx``/``adv_idx``.
+    tbsim resolves ``guide_cfg.agents`` as ``cur_scene_inds[agents]``, so any
+    other index space (e.g. positions within ``control_idx``) silently guides
+    the wrong agents.
 
     Published weights use the sign convention of an earlier loss. V3 is a
     positive distance loss, so its optimizer weight must be positive.
@@ -96,8 +102,8 @@ def build_v3_guidance(
         "conflict_point": selection["conflict_point"],
         "ego_arrival_time": selection["ego_arrival_time"],
         "adv_arrival_time": selection["adv_arrival_time"],
-        "ego_idx": ego_local_idx,
-        "adv_idx": adv_local_idx,
+        "ego_idx": ego_scene_idx,
+        "adv_idx": adv_scene_idx,
         "conflict_type": selection["conflict_type"],
         "sub_type": selection.get("sub_type"),
         "danger_score": selection["danger_score"],
@@ -110,7 +116,7 @@ def build_v3_guidance(
             "name": "conflict_point_guidance_v3",
             "weight": abs(float(selection.get("guidance_weight", 1.0))),
             "params": params,
-            "agents": [int(ego_local_idx), int(adv_local_idx)],
+            "agents": [int(ego_scene_idx), int(adv_scene_idx)],
         }
     ]
     if add_map_collision:

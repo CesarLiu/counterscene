@@ -5,6 +5,9 @@
 #  You may not use this file except in compliance with the License.
 
 import copy
+import os as _os_dbg
+
+_DEBUG_GRAD = bool(_os_dbg.environ.get("COUNTERSCENE_DEBUG_GRAD"))
 
 from tbsim.utils.guidance_loss import *
 
@@ -261,23 +264,29 @@ class PartialPerturbationGuidance(PerturbationGuidance):
             x_guidance_reshaped = x_guidance
         # TODO: perturb on all
         # self.available_idx = None
+        grad_mask = None
         if self.available_idx is not None:
             guide_dim = x_guidance.shape[-3]
             available_idx = self.available_idx[:guide_dim]
-            # available_idx = [i for i in range(guide_dim)]
-            # print(x_guidance.shape, x_guidance_reshaped.shape, self.available_idx)
-            if opt_params['optimizer'] == 'adam': # TODO: different for diffusion and CCDiff
-                # opt = torch.optim.Adam([x_guidance], lr=opt_params['lr'])
-                if len(x_guidance.shape) == 3:
-                    opt = torch.optim.Adam([x_guidance[available_idx, :self.controllable_ts]], lr=opt_params['lr'])
-                elif len(x_guidance.shape) == 4:
-                    opt = torch.optim.Adam([x_guidance[:, available_idx, :self.controllable_ts]], lr=opt_params['lr'])
+            # Optimise x_guidance itself and confine the update with a gradient
+            # mask. Handing the optimiser x_guidance[..., available_idx, ...]
+            # instead silently disables guidance: sampling runs under no_grad, so
+            # the advanced index yields a *detached copy* (leaf, requires_grad
+            # False) which Adam accepts without complaint; backward() then fills
+            # x_guidance.grad rather than the copy's, and opt.step() updates the
+            # throwaway copy, leaving the trajectory bit-identical. It only bites
+            # when available_idx is set -- i.e. exactly under --part_control.
+            grad_mask = torch.zeros_like(x_guidance)
+            if len(x_guidance.shape) == 3:
+                grad_mask[available_idx, :self.controllable_ts] = 1.0
+            elif len(x_guidance.shape) == 4:
+                grad_mask[:, available_idx, :self.controllable_ts] = 1.0
+            else:
+                grad_mask = None
+            if opt_params['optimizer'] == 'adam':
+                opt = torch.optim.Adam([x_guidance], lr=opt_params['lr'])
             elif opt_params['optimizer'] == 'sgd':
-                # opt = torch.optim.SGD([x_guidance], lr=opt_params['lr'])
-                if len(x_guidance.shape) == 3:
-                    opt = torch.optim.SGD([x_guidance[available_idx, :self.controllable_ts]], lr=opt_params['lr'])
-                elif len(x_guidance.shape) == 4:
-                    opt = torch.optim.SGD([x_guidance[:, available_idx, :self.controllable_ts]], lr=opt_params['lr'])
+                opt = torch.optim.SGD([x_guidance], lr=opt_params['lr'])
         else:
             if opt_params['optimizer'] == 'adam': # TODO: different for diffusion and CCDiff
                 opt = torch.optim.Adam([x_guidance], lr=opt_params['lr'])
@@ -307,6 +316,25 @@ class PartialPerturbationGuidance(PerturbationGuidance):
                 tot_loss, per_losses = self.current_guidance.compute_guidance_loss(x_loss, data_batch)
 
             tot_loss.backward()
+            if _DEBUG_GRAD:
+                # COUNTERSCENE_DEBUG_GRAD=1 reports where the guidance gradient
+                # actually lands. The rows printed here must intersect
+                # available_idx, otherwise the mask below zeroes everything and
+                # the guidance is silently a no-op.
+                g = x_guidance.grad
+                if g is None:
+                    print("[GRAD] x_guidance.grad is None -- graph broken", flush=True)
+                elif g.dim() == 4:
+                    per_row = g.abs().amax(dim=(0, 2, 3))   # (B*N, M, T, D) -> M
+                    nz = (per_row > 0).nonzero().flatten().tolist()
+                    print("[GRAD] loss=%.6f shape=%s nonzero_rows=%s available_idx=%s"
+                          % (float(tot_loss), tuple(g.shape),
+                             [int(i) for i in nz], self.available_idx), flush=True)
+                else:
+                    print("[GRAD] loss=%.6f shape=%s total_absmax=%.3e"
+                          % (float(tot_loss), tuple(g.shape), float(g.abs().max())), flush=True)
+            if grad_mask is not None and x_guidance.grad is not None:
+                x_guidance.grad.mul_(grad_mask)
             opt.step()
             opt.zero_grad()
             if perturb_th is not None:

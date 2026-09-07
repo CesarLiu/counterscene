@@ -39,7 +39,8 @@ from ccdiff.counterscene.guidance import build_v3_guidance
 def run_scene_editor(eval_cfg, save_cfg, data_to_disk, render_to_video, render_to_img, render_cfg, part_control=False, controllable_agent=-1,
                     num_steps_intervention=0, selected_vehicles=None,
                     conflict_ablation="full",
-                    conflict_adversary_only=True):
+                    conflict_adversary_only=True,
+                    replay_ego=False):
     assert eval_cfg.env in ["nusc", "trajdata"], "Currently only nusc and trajdata environments are supported"
 
     set_global_batch_type("trajdata")
@@ -202,6 +203,11 @@ def run_scene_editor(eval_cfg, save_cfg, data_to_disk, render_to_video, render_t
 
             mark_agents = [(i, "*", "red") for i in control_idx]
             control_policy.set_controllable_set(control_idx)
+            if replay_ego:
+                # Hold the recorded ego on its logged trajectory; the world
+                # model still drives every other agent, and the counterfactual
+                # gradient still targets the adversary only.
+                control_policy.set_replay_set([int(selection["ego_idx"])])
             if eval_cfg.eval_class in ['CCDiff']:
                 policy_model.nets['policy'].set_guidance_dim(control_idx, eval_cfg.n_step_action)
                 print("set guidance dim: ", control_idx, 'timestep: ', eval_cfg.n_step_action)
@@ -313,8 +319,15 @@ def run_scene_editor(eval_cfg, save_cfg, data_to_disk, render_to_video, render_t
                         conflict_guidance.append(
                             build_v3_guidance(
                                 selection,
-                                control_idx.index(ego_global),
-                                control_idx.index(adv_global),
+                                # Scene-local agent rows, NOT positions within
+                                # control_idx. tbsim resolves guide_cfg.agents
+                                # as cur_scene_inds[agents], i.e. indices into
+                                # the scene's own agent rows; passing
+                                # control_idx.index(...) guides whichever agents
+                                # happen to sit at rows 0/1 and leaves the real
+                                # adversary with zero gradient.
+                                ego_global,
+                                adv_global,
                                 ablation=conflict_ablation,
                                 total_horizon=eval_cfg.num_simulation_steps,
                                 adversary_only=conflict_adversary_only,
@@ -723,6 +736,13 @@ if __name__ == "__main__":
         action="store_true",
         help="Guide both ego and adversary as in the legacy research code",
     )
+    parser.add_argument(
+        "--replay_ego",
+        action="store_true",
+        help="Keep the ego on its logged trajectory after intervention and let "
+             "the world model drive only the other agents. Use this to probe a "
+             "recorded ego's safety margin without letting it react.",
+    )
 
     args = parser.parse_args()
 
@@ -832,4 +852,5 @@ if __name__ == "__main__":
         selected_vehicles=selected_vehicles,
         conflict_ablation=args.v3_ablation_variant,
         conflict_adversary_only=not args.legacy_joint_conflict_guidance,
+        replay_ego=args.replay_ego,
     )

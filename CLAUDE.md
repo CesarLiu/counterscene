@@ -127,9 +127,16 @@ Three files, in order:
   `global_t / total_horizon`. It is also registered as scene-level guidance in that file's
   `is_scene_level` list — a new scene-level guidance name must be added there too.
 
-Index convention worth internalizing: the published `ego_idx`/`adv_idx` are **trajdata scene-local** agent
-indices, while `build_v3_guidance` receives their *positions within `control_idx`*
-(`control_idx.index(ego_global)`). Mixing the two silently guides the wrong agent.
+Index convention worth internalizing: `guide_cfg.agents` is resolved by tbsim as
+`cur_scene_inds[guide_cfg.agents]` (`third_party/tbsim/tbsim/utils/guidance_loss.py`), i.e. as indices into
+the scene's **own agent rows** — the same space as the published `ego_idx`/`adv_idx`. So
+`build_v3_guidance` must be given those scene rows directly, *not* their positions within `control_idx`.
+The release originally passed `control_idx.index(...)`, which put the whole V3 gradient on whichever
+agents happened to occupy rows 0/1 while `PartialPerturbationGuidance` only allowed the real
+`control_idx` rows to move — the two sets are disjoint, so the guidance was inert. Note also that
+`ConflictPointGuidanceLossV3` hardcodes `ego_idx=0, adv_idx=1` *after* masking, so the ordering of the
+selected rows (ascending, since the mask is boolean) is what decides which agent is treated as the
+adversary; the `ego_idx`/`adv_idx` params only feed an equality check.
 
 ### The selected-vehicle artifact, and the mining stage beside it
 
