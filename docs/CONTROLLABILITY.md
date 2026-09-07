@@ -130,4 +130,49 @@ check locality instead.
 
 ## Results
 
-<!-- filled in from the run described above -->
+Checkpoint `iter28000` (a partially trained model — 28 k of the scheduled 33 k steps), seven tier-A
+scenes, 50 simulation steps. Every figure is a mean over those scenes; `dev_*` is mean per-agent
+displacement against the `baseline` rollout.
+
+| arm | dose | dev_adv | dev_ego | dev_others | min_clearance | min_ttc |
+|---|---|---|---|---|---|---|
+| `baseline` | 0.0 | — | — | — | 11.67 | 11.26 |
+| `baseline_s0b` | 0.0 | **0.000** | **0.000** | **0.000** | 11.67 | 11.26 |
+| `baseline_s1` | 0.0 | 2.04 | 2.45 | 0.67 | 9.35 | 3.97 |
+| `conservative` | 1.2 | 6.73 | 4.10 | 0.71 | 9.33 | 8.34 |
+| `full` | 3.0 | 6.28 | 3.29 | 0.75 | 9.70 | 5.50 |
+| `aggressive` | 5.0 | 6.05 | 3.66 | 0.74 | 9.34 | 5.38 |
+
+**The rollout is bit-deterministic at a fixed seed.** `baseline_s0b` reproduces `baseline` exactly —
+every deviation is 0.000 and every safety metric is identical. There is therefore no noise floor to clear
+and no statistical argument to make: the whole difference between a guided arm and `baseline` is caused
+by the guidance. (`baseline_s1` is a *different* seed; its 2.04 m is chaotic divergence, not measurement
+noise, and it is the wrong yardstick now that the same-seed floor is known to be zero.)
+
+**The intervention is real, directional and localised.** The adversary moves ~6.3 m on average — three
+times what changing the seed entirely does — while the uncontrolled agents move 0.75 m, about an eighth
+as far. Those 0.75 m are genuine world-model propagation, not noise. The ego's margin closes
+consistently: `min_clearance` 11.67 → ~9.4 m and `min_ttc` 11.26 → 5.4–8.3 s.
+
+**It is not dose-controllable through the ablation variants.** `dev_adv` is flat (6.73 / 6.28 / 6.05) and
+if anything decreases with dose. The cause is mechanical, not statistical: the guidance takes exactly one
+Adam step per denoising step (`grad_steps: 1`), and Adam's first step is `lr * sign(grad)` — independent
+of gradient magnitude:
+
+```
+stage multiplier  0.2  ->  step = [-0.3, 0.3, -0.3, -0.3]
+stage multiplier  5.0  ->  step = [-0.3, 0.3, -0.3, -0.3]
+```
+
+So the V3 stage multiplier, the `guidance_weight` in the artifact, and every `--v3_ablation_variant`
+preset change only the *direction* of the perturbation, never its size. **The knob that actually scales
+the intervention is `guidance_optimization_params.lr`** (and secondarily `grad_steps`), not any loss
+weight. Sweep that instead when a dose axis is needed.
+
+### Caveat on this particular run
+
+The five arms were launched in parallel on one 24 GB card and OOMed part-way through the set, at
+different scenes: they cover 9 / 7 / 15 / 16 / 15 / 13 of the 16 scenes. The table above is restricted to
+the seven scenes every arm completed, which happen to be seven of the eight tier-A scenes. The
+conclusions rest on those seven; the tier-B breadth check has not been run. `run_controllability.sh` now
+runs the arms serially and reports a non-zero exit instead of hiding it.

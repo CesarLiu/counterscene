@@ -62,11 +62,20 @@ run_arm () {
     --num_simulation_steps "${STEPS}" \
     --n_step_action 5 --save_every_n_frames 5 \
     --seed "${seed}" "${REPLAY[@]}" "$@" > "${OUT}/${tag}.log" 2>&1
-  echo "[$(date +%H:%M:%S)] done ${tag}"
+  rc=$?
+  echo "[$(date +%H:%M:%S)] done ${tag} rc=${rc}"
+  if [ "${rc}" -ne 0 ]; then
+    echo "  !! ${tag} did not finish -- its rollout covers fewer scenes than the"
+    echo "     others, so score it only over the scenes every arm has. Last lines:"
+    tail -3 "${OUT}/${tag}.log" | sed 's/^/     /'
+  fi
 }
 
-# The arms are independent; run them in parallel if the GPU has room (~3 GB
-# each). Serial is the safe default.
+# The arms are independent, but do NOT run all five at once on a single card.
+# Per-process memory scales with the number of agents in the current scene, so
+# five arms fit while the early scenes are small and then OOM part-way through
+# the set -- each arm dies at a different scene and the usable intersection
+# shrinks silently. Two arms on a 24 GB card is safe; serial is the default.
 run_arm baseline     "${CFG_DIR}/unguided.json" 0
 run_arm baseline_s1  "${CFG_DIR}/unguided.json" 1
 run_arm conservative "${CFG_DIR}/guided.json"   0 --v3_ablation_variant very_conservative
