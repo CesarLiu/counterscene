@@ -52,7 +52,7 @@ class NuscTrajdataSceneTrainConfig(TrajdataTrainConfig):
         # PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:128 in scripts/run_train.sh.
         # Re-probe -- and watch nvidia-smi through the first several hundred
         # steps of any real run -- before raising this again or on other hardware.
-        self.training.batch_size = 12 # 16 # 4 # 100
+        self.training.batch_size = 10 # 16 # 4 # 100
         # num_steps/save.every_n_steps below are pre-scaled to this batch_size
         # from Table 6's reference recipe (batch_size=4, 100000 steps, saved
         # every 10000) so behavior is sensible even with train.py's

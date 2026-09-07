@@ -1,0 +1,607 @@
+{
+    "registered_name": "trajdata_nusc_counterscene",
+    "train": {
+        "logging": {
+            "terminal_output_to_txt": true,
+            "log_tb": false,
+            "log_wandb": true,
+            "wandb_project_name": "tbsim",
+            "log_every_n_steps": 10,
+            "flush_every_n_steps": 100
+        },
+        "save": {
+            "enabled": true,
+            "every_n_steps": 4000,
+            "best_k": 10,
+            "save_best_rollout": false,
+            "save_best_validation": true
+        },
+        "rollout": {
+            "save_video": true,
+            "enabled": true,
+            "every_n_steps": 100000,
+            "warm_start_n_steps": 0
+        },
+        "training": {
+            "batch_size": 10,
+            "num_steps": 40000,
+            "num_data_workers": 8
+        },
+        "validation": {
+            "enabled": true,
+            "batch_size": 1,
+            "num_data_workers": 6,
+            "every_n_steps": 500,
+            "num_steps_per_epoch": 5
+        },
+        "parallel_strategy": "ddp_spawn",
+        "on_ngc": false,
+        "datamodule_class": "PassUnifiedDataModule",
+        "trajdata_cache_location": "~/.unified_data_cache",
+        "trajdata_source_train": [
+            "nusc_trainval-train",
+            "nusc_trainval-train_val"
+        ],
+        "trajdata_source_valid": [
+            "nusc_trainval-val"
+        ],
+        "trajdata_data_dirs": {
+            "nusc_trainval": "/home/Cesar/diffCurricula/CounterScene/data/nuscenes",
+            "nusc_test": "/home/Cesar/diffCurricula/CounterScene/data/nuscenes",
+            "nusc_mini": "/home/Cesar/diffCurricula/CounterScene/data/nuscenes"
+        },
+        "trajdata_rebuild_cache": false,
+        "training_vec_map_params": {
+            "S_seg": 15,
+            "S_point": 80,
+            "map_max_dist": 80,
+            "max_heading_error": 0.7853981633974483,
+            "ahead_threshold": -40,
+            "dist_weight": 1.0,
+            "heading_weight": 0.1
+        },
+        "dataset_path": "/home/Cesar/diffCurricula/CounterScene/data/nuscenes"
+    },
+    "env": {
+        "name": "trajdata",
+        "data_generation_params": {
+            "trajdata_centric": "scene",
+            "trajdata_only_types": [
+                "vehicle"
+            ],
+            "trajdata_predict_types": [
+                "vehicle"
+            ],
+            "trajdata_scene_desc_contains": null,
+            "trajdata_incl_map": true,
+            "trajdata_max_agents_distance": 50,
+            "trajdata_standardize_data": true,
+            "other_agents_num": 20
+        },
+        "rasterizer": {
+            "include_hist": true,
+            "num_sem_layers": 3,
+            "drivable_layers": null,
+            "rgb_idx_groups": [
+                [
+                    0
+                ],
+                [
+                    1
+                ],
+                [
+                    2
+                ]
+            ],
+            "raster_size": 224,
+            "pixel_size": 0.5,
+            "ego_center": [
+                -0.5,
+                0.0
+            ],
+            "no_map_fill_value": -1.0
+        }
+    },
+    "algo": {
+        "name": "counterscene",
+        "eval_class": "CCDiff",
+        "coordinate": "agent_centric",
+        "scene_agent_max_neighbor_dist": Infinity,
+        "diffuser_model_arch": "SceneTransformer",
+        "agent_hist_embed_method": "concat",
+        "neigh_hist_embed_method": "interaction_edge",
+        "map_embed_method": "cnn",
+        "map_encoder_model_arch": "resnet18",
+        "interaction_edge_speed_repr": "rel_vel_new_new",
+        "single_cond_feat": true,
+        "normalize_rel_states": true,
+        "mask_social_interaction": false,
+        "mask_edge": false,
+        "neighbor_inds": [
+            0,
+            1,
+            4,
+            5,
+            10,
+            11,
+            12,
+            13
+        ],
+        "edge_attr_separation": [
+            [
+                0,
+                1
+            ],
+            [
+                2,
+                3
+            ],
+            [
+                4,
+                5,
+                6,
+                7
+            ]
+        ],
+        "social_attn_radius": 50.0,
+        "use_last_hist_step": false,
+        "use_noisy_fut_edge": false,
+        "use_const_speed_edge": true,
+        "all_interactive_social": false,
+        "mask_time": false,
+        "layer_num_per_edge_decoder": 4,
+        "attn_combination": "gate",
+        "disable_control_on_stationary": "current_speed",
+        "moving_speed_th": 0.5,
+        "rasterized_history": false,
+        "rasterized_map": true,
+        "use_map_feat_global": true,
+        "use_map_feat_grid": false,
+        "horizon": 52,
+        "n_diffusion_steps": 100,
+        "action_weight": 1,
+        "diffusor_loss_weights": null,
+        "loss_discount": 1,
+        "predict_epsilon": false,
+        "clip_denoised": false,
+        "loss_type": "l2_with_agent_collision_and_map_collision",
+        "use_ema": true,
+        "ema_step": 1,
+        "ema_decay": 0.995,
+        "ema_start_step": 4000,
+        "action_loss_only": false,
+        "diffuser_input_mode": "state_and_action",
+        "use_reconstructed_state": false,
+        "conditioning_drop_map_p": 0.0,
+        "conditioning_drop_neighbor_p": 0.0,
+        "conditioning_drop_graph_p": 0.1,
+        "conditioning_drop_fill": 0.5,
+        "map_feature_dim": 128,
+        "map_grid_feature_dim": 32,
+        "history_feature_dim": 64,
+        "history_num_frames": 30,
+        "history_num_frames_ego": 30,
+        "history_num_frames_agents": 30,
+        "future_num_frames": 52,
+        "step_time": 0.1,
+        "render_ego_history": false,
+        "decoder": {
+            "layer_dims": [],
+            "state_as_input": true
+        },
+        "dynamics": {
+            "type": "Unicycle",
+            "max_steer": 0.5,
+            "max_yawvel": 6.283185307179586,
+            "acce_bound": [
+                -10,
+                8
+            ],
+            "ddh_bound": [
+                -6.283185307179586,
+                6.283185307179586
+            ],
+            "max_speed": 40.0
+        },
+        "loss_weights": {
+            "diffusion_loss": 1.0,
+            "collision_loss": 0.0,
+            "offroad_loss": 0.0,
+            "history_reconstruction_loss": 0.0
+        },
+        "loss_decay_rates": {
+            "collision_decay_rate": 0.9,
+            "offroad_decay_rate": 0.9
+        },
+        "optim_params": {
+            "policy": {
+                "learning_rate": {
+                    "initial": 0.0001,
+                    "decay_factor": 0.1,
+                    "epoch_schedule": []
+                }
+            }
+        },
+        "diffuser": {
+            "num_eval_samples": 10
+        },
+        "nusc_norm_info": {
+            "diffuser": [
+                [
+                    2.308888,
+                    -0.004272,
+                    1.030073,
+                    0.000432,
+                    -0.00465,
+                    0.000229
+                ],
+                [
+                    5.253208,
+                    0.494499,
+                    2.126455,
+                    0.046915,
+                    0.632508,
+                    0.021437
+                ]
+            ],
+            "agent_hist_diff": [
+                [
+                    -1.268214,
+                    0.003279,
+                    1.426153,
+                    -0.000207,
+                    -0.009448,
+                    -0.000218
+                ],
+                [
+                    2.970397,
+                    0.152488,
+                    3.195604,
+                    0.027117,
+                    29.687944,
+                    0.054703
+                ]
+            ],
+            "agent_hist": [
+                [
+                    -1.306818,
+                    0.003479,
+                    1.057708,
+                    4.849725,
+                    2.082991
+                ],
+                [
+                    3.057464,
+                    0.159666,
+                    2.134414,
+                    1.338733,
+                    0.358624
+                ]
+            ],
+            "neighbor_hist": [
+                [
+                    0.299714,
+                    1.586693,
+                    0.580586,
+                    1.351683,
+                    0.341308
+                ],
+                [
+                    13.23415,
+                    12.151883,
+                    1.452567,
+                    2.61824,
+                    0.925493
+                ]
+            ],
+            "neighbor_fut": [
+                [
+                    0.574813,
+                    1.412446,
+                    0.436985,
+                    0.834127,
+                    0.214287
+                ],
+                [
+                    10.500033,
+                    8.795879,
+                    1.412703,
+                    2.606573,
+                    0.894968
+                ]
+            ]
+        },
+        "nuplan_norm_info": {
+            "diffuser": [
+                [
+                    4.317393,
+                    0.005299,
+                    2.007901,
+                    0.001517,
+                    0.027003,
+                    0.00073
+                ],
+                [
+                    8.128303,
+                    0.436614,
+                    3.379836,
+                    0.067413,
+                    4.997261,
+                    0.073624
+                ]
+            ],
+            "agent_hist_diff": [
+                [
+                    -2.366227,
+                    0.002367,
+                    2.254006,
+                    -0.00093,
+                    -0.00922,
+                    0.000224
+                ],
+                [
+                    4.653337,
+                    0.123767,
+                    4.684658,
+                    0.04778,
+                    54.973598,
+                    0.105584
+                ]
+            ],
+            "agent_hist": [
+                [
+                    -2.428304,
+                    0.002483,
+                    2.006769,
+                    4.890794,
+                    2.027937
+                ],
+                [
+                    4.738251,
+                    0.13021,
+                    3.472377,
+                    0.534438,
+                    0.129952
+                ]
+            ],
+            "neighbor_hist": [
+                [
+                    1.744586,
+                    2.933562,
+                    1.482359,
+                    1.37511,
+                    0.569008
+                ],
+                [
+                    17.750463,
+                    11.847486,
+                    2.611224,
+                    2.349849,
+                    0.865068
+                ]
+            ],
+            "neighbor_fut": [
+                [
+                    4.236001,
+                    2.346138,
+                    1.454897,
+                    0.9582,
+                    0.352373
+                ],
+                [
+                    15.373465,
+                    10.32068,
+                    2.627709,
+                    2.209175,
+                    0.796853
+                ]
+            ]
+        },
+        "motion_dist": "cig_soft",
+        "use_conflict_soft_gate": true,
+        "conflict_gate_hidden_dim": 64,
+        "conflict_gate_eps": 0.0001,
+        "cig_horizon_steps": 52,
+        "cig_ttc_cap": 5.2,
+        "cig_distance_cap": 20.0,
+        "cig_speed_cap": 20.0
+    },
+    "eval": {
+        "name": null,
+        "env": "trajdata",
+        "dataset_path": "/home/Cesar/diffCurricula/CounterScene/data/nuscenes",
+        "eval_class": "CCDiff",
+        "seed": 0,
+        "num_scenes_per_batch": 1,
+        "num_scenes_to_evaluate": 10,
+        "num_episode_repeats": 1,
+        "start_frame_index_each_episode": null,
+        "seed_each_episode": null,
+        "ego_only": false,
+        "agent_eval_class": null,
+        "ckpt_root_dir": "checkpoints/",
+        "experience_hdf5_path": null,
+        "results_dir": "results/",
+        "ckpt": {
+            "policy": {
+                "ngc_job_id": null,
+                "ckpt_dir": null,
+                "ckpt_key": null
+            },
+            "planner": {
+                "ngc_job_id": null,
+                "ckpt_dir": null,
+                "ckpt_key": null
+            },
+            "predictor": {
+                "ngc_job_id": null,
+                "ckpt_dir": null,
+                "ckpt_key": null
+            },
+            "cvae_metric": {
+                "ngc_job_id": null,
+                "ckpt_dir": null,
+                "ckpt_key": null
+            },
+            "occupancy_metric": {
+                "ngc_job_id": null,
+                "ckpt_dir": null,
+                "ckpt_key": null
+            }
+        },
+        "policy": {
+            "mask_drivable": true,
+            "num_plan_samples": 50,
+            "num_action_samples": 2,
+            "pos_to_yaw": true,
+            "yaw_correction_speed": 1.0,
+            "diversification_clearance": null,
+            "sample": false,
+            "cost_weights": {
+                "collision_weight": -50.0,
+                "lane_weight": 1.0,
+                "likelihood_weight": 0.0,
+                "progress_weight": 0.0
+            },
+            "use_ema": false,
+            "class_free_guide_w": 0.1,
+            "guide_as_filter_only": false,
+            "guide_clean": "video_diff"
+        },
+        "goal_conditional": false,
+        "perturb_output_trajectory": false,
+        "perturb_opt_params": {
+            "optimizer": "adam",
+            "grad_steps": 30,
+            "perturb_th": 100.0,
+            "optimizer_params": {
+                "lr": 0.001
+            }
+        },
+        "filtration": false,
+        "num_filtration_samples": 5,
+        "guidance_optimization_params": {
+            "optimizer": "adam",
+            "lr": 0.3,
+            "grad_steps": 1,
+            "perturb_th": null
+        },
+        "denoising_params": {
+            "stride": 1,
+            "perturb_output_trajectory": false
+        },
+        "metrics": {
+            "compute_analytical_metrics": true,
+            "compute_learned_metrics": false
+        },
+        "perturb": {
+            "enabled": false,
+            "OU": {
+                "theta": 0.8,
+                "sigma": [
+                    0.0,
+                    0.1,
+                    0.2,
+                    0.5,
+                    1.0,
+                    2.0,
+                    4.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    0.2
+                ]
+            }
+        },
+        "rolling_perturb": {
+            "enabled": false,
+            "OU": {
+                "theta": 0.8,
+                "sigma": 0.5,
+                "scale": [
+                    1.0,
+                    1.0,
+                    0.2
+                ]
+            }
+        },
+        "occupancy": {
+            "rolling": true,
+            "rolling_horizon": [
+                5,
+                10,
+                20
+            ]
+        },
+        "cvae": {
+            "rolling": true,
+            "rolling_horizon": [
+                5,
+                10,
+                20
+            ]
+        },
+        "adjustment": {
+            "random_init_plan": false,
+            "remove_existing_neighbors": false,
+            "initial_num_neighbors": 4,
+            "num_frame_per_new_agent": 20
+        },
+        "trajdata": {
+            "trajdata_cache_location": "~/.unified_data_cache",
+            "trajdata_rebuild_cache": false,
+            "trajdata_source_test": [
+                "nusc_trainval-val"
+            ],
+            "trajdata_data_dirs": {
+                "nusc_trainval": "/home/Cesar/diffCurricula/CounterScene/data/nuscenes"
+            },
+            "num_scenes_to_evaluate": 10,
+            "eval_scenes": [
+                0,
+                10,
+                20,
+                30,
+                40,
+                50,
+                60,
+                70,
+                80,
+                90
+            ],
+            "n_step_action": 5,
+            "num_simulation_steps": 100,
+            "skip_first_n": 0
+        },
+        "trajdata_cache_location": "~/.unified_data_cache",
+        "trajdata_rebuild_cache": false,
+        "trajdata_source_test": [
+            "nusc_trainval-val"
+        ],
+        "trajdata_data_dirs": {
+            "nusc_trainval": "/home/Cesar/diffCurricula/CounterScene/data/nuscenes"
+        },
+        "eval_scenes": [
+            0,
+            10,
+            20,
+            30,
+            40,
+            50,
+            60,
+            70,
+            80,
+            90
+        ],
+        "n_step_action": 5,
+        "num_simulation_steps": 100,
+        "skip_first_n": 0
+    },
+    "name": "counterscene",
+    "root_dir": "/home/Cesar/diffCurricula/CounterScene/exps",
+    "seed": 1,
+    "devices": {
+        "num_gpus": 1
+    }
+}

@@ -28,6 +28,7 @@ import argparse
 import json
 import os
 import sys
+from dataclasses import replace
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence
 
@@ -39,6 +40,7 @@ if str(REPOSITORY_ROOT) not in sys.path:
 
 from ccdiff.counterscene.artifacts import load_selected_vehicles  # noqa: E402
 from ccdiff.counterscene.selection import (  # noqa: E402
+    STRICT_CONFIG,
     SceneTracks,
     SelectionConfig,
     build_selected_vehicles,
@@ -175,6 +177,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         default=["vehicle"],
         help="agent types the simulator keeps; matches the eval config's only_types",
     )
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="apply STRICT_CONFIG's extra gates (encounter distance, arrival gap, "
+        "interior encounter, moving agents, full-horizon validity) on top of "
+        "appendix A.2, keeping only targets a closed-loop counterfactual can act on",
+    )
     parser.add_argument("--output", required=True, help="where to write the JSON artifact")
     parser.add_argument("--compare_to", default=None, help="report agreement with this artifact")
     args = parser.parse_args(argv)
@@ -183,7 +192,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if not cache_dir.is_dir():
         parser.error(f"no cached environment at {cache_dir}")
 
-    config = SelectionConfig(dt=args.dt, total_horizon=args.total_horizon)
+    base = STRICT_CONFIG if args.strict else SelectionConfig()
+    config = replace(base, dt=args.dt, total_horizon=args.total_horizon)
     entries: Dict[str, dict] = {}
     skipped: List[str] = []
 

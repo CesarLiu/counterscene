@@ -94,8 +94,66 @@ class SelectionConfig:
     following_score_weight: float = 30.0
     fallback_weight: float = -50.0
 
+    # ------------------------------------------------------------------
+    # Additional gates, all disabled by default so the defaults above stay
+    # exactly appendix A.2. STRICT_CONFIG below turns them on; each one exists
+    # because the published gating admits targets that cannot produce a
+    # counterfactual conflict in closed loop. See docs/REPRODUCIBILITY.md.
+    # ------------------------------------------------------------------
+
+    # Eq. 15's intersection branch, v_rel / (dt + 0.5), has no distance term, and
+    # tier 1 bounds only the arrival gap -- so a pair tens of metres apart scores
+    # highly and is selected. Following conflicts *are* distance-bounded (tiers 2
+    # and 3), which makes the omission for intersections look unintended.
+    max_encounter_distance_m: Optional[float] = None
+
+    # tier1_max_arrival_gap_s = 5.0 cannot bind on a 50-step / 5 s horizon, where
+    # |tau_e - tau_a| * dt <= 4.9 s by construction. A conflict worth intervening
+    # on needs the two agents at the encounter at roughly the same time.
+    max_arrival_gap_s: Optional[float] = None
+
+    # eq. 10 minimising at the last index means the true closest approach lies
+    # outside the horizon: the pair is still converging when the window ends, so
+    # the "encounter" is an extrapolation rather than an observed one.
+    reject_boundary_encounter: bool = False
+
+    # Symmetrically, an encounter at the first indices is unusable for a
+    # different reason: the rollout starts from the observed state, so the
+    # guidance term ||x_a(tau_a) - c|| evaluated on the first predicted steps has
+    # almost no room to move the agent. Applied to the adversary only -- under
+    # the release default adversary_only=True the ego side of both the spatial
+    # and the sync term is detached, so tau_e needs no leverage.
+    min_adv_encounter_index: Optional[int] = None
+
+    # The simulator freezes agents whose GT future speed at the first step is
+    # below algo_config.moving_speed_th (0.5 m/s) for the whole rollout
+    # (get_stationary_mask -> preds are overwritten with zero displacement), so an
+    # intervention on a parked adversary is a no-op no matter how it is guided.
+    min_agent_speed_mps: Optional[float] = None
+
+    # An agent whose GT ends mid-rollout leaves the scene, taking the conflict
+    # with it; the same mask also freezes agents whose future validity is false
+    # at the first step.
+    require_full_horizon_validity: bool = False
+
 
 DEFAULT_CONFIG = SelectionConfig()
+
+# Mining that keeps only targets a closed-loop counterfactual can actually act
+# on. Measured over the 90 published scenes, the paper's own gating yields a
+# median encounter distance of 32 m, leaves 46/86 encounters pinned to the last
+# horizon index, and picks a stationary adversary in 54/90 scenes -- so most
+# published targets are not conflicts and the intervention cannot bite. These
+# bounds are this repository's, not the paper's; keep them separate from
+# DEFAULT_CONFIG so appendix A.2 stays reproducible as published.
+STRICT_CONFIG = SelectionConfig(
+    max_encounter_distance_m=15.0,
+    max_arrival_gap_s=1.5,
+    reject_boundary_encounter=True,
+    min_adv_encounter_index=5,
+    min_agent_speed_mps=1.0,
+    require_full_horizon_validity=True,
+)
 
 
 @dataclass(frozen=True)
@@ -276,6 +334,14 @@ def _assign_tier(
     """Tier-based filtering; ``None`` means the candidate is discarded."""
     if score < config.min_conflict_score:
         return None
+    # Opt-in gates; no-ops under the published configuration.
+    if (
+        config.max_encounter_distance_m is not None
+        and min_distance >= config.max_encounter_distance_m
+    ):
+        return None
+    if config.max_arrival_gap_s is not None and arrival_gap >= config.max_arrival_gap_s:
+        return None
     if conflict_type == CONFLICT_INTERSECTION:
         return TIER_INTERSECTION if arrival_gap < config.tier1_max_arrival_gap_s else None
     if sub_type == SUB_TYPE_REAR_APPROACH:
@@ -297,12 +363,39 @@ def _evaluate_pair(
     if int(np.count_nonzero(ego_valid & adv_valid)) < config.min_joint_steps:
         return None
 
+    # Opt-in gates that depend on the raw tracks rather than the encounter.
+    if config.require_full_horizon_validity and not (
+        np.all(ego_valid) and np.all(adv_valid)
+    ):
+        return None
+    if config.min_agent_speed_mps is not None:
+        for row, valid in ((ego_idx, ego_valid), (adv_idx, adv_valid)):
+            steps = np.flatnonzero(valid)
+            if steps.size < 2:
+                return None
+            first = int(steps[0])
+            speed = float(
+                np.linalg.norm(
+                    tracks.positions[row, first + 1] - tracks.positions[row, first]
+                ) / config.dt
+            )
+            if speed < config.min_agent_speed_mps:
+                return None
+
     ego_path = tracks.positions[ego_idx, :horizon]
     adv_path = tracks.positions[adv_idx, :horizon]
     encounter = _closest_encounter(ego_path, adv_path, ego_valid, adv_valid)
     if encounter is None:
         return None
     tau_e, tau_a, min_distance = encounter
+
+    if config.reject_boundary_encounter:
+        last_ego = int(np.flatnonzero(ego_valid)[-1])
+        last_adv = int(np.flatnonzero(adv_valid)[-1])
+        if tau_e >= last_ego or tau_a >= last_adv:
+            return None
+    if config.min_adv_encounter_index is not None and tau_a < config.min_adv_encounter_index:
+        return None
 
     conflict_point = 0.5 * (ego_path[tau_e] + adv_path[tau_a])  # eq. 11
     arrival_gap = abs(tau_e - tau_a) * config.dt  # eq. 13
