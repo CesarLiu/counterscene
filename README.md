@@ -290,3 +290,20 @@ CounterScene builds on
 [traffic-behavior-simulation](https://github.com/NVlabs/traffic-behavior-simulation),
 [trajdata](https://github.com/NVlabs/trajdata), and
 [spline-planner](https://github.com/NVlabs/spline-planner).
+
+复现命令
+
+export NUSCENES_ROOT=... TRAJDATA_CACHE_DIR=...
+export COUNTERSCENE_CHECKPOINT_DIR=exps/counterscene/run0
+export COUNTERSCENE_CHECKPOINT_KEY=iter28000.ckpt
+
+bash scripts/run_controllability.sh                    # 五臂;串行
+COUNTERSCENE_REPLAY_EGO=1 bash scripts/run_controllability.sh   # ego 走 log
+python scripts/score_rollout.py --hdf5 <arm>/scene_edit_eval/data.hdf5 \
+  --reference_hdf5 <baseline>/scene_edit_eval/data.hdf5 \
+  --selected_vehicles data/counterscene_selected_vehicles.json --output m.json
+跑任何批次前,先用梯度探针确认引导没有失效(docs/CONTROLLABILITY.md 有完整命令):
+
+
+COUNTERSCENE_DEBUG_GRAD=1 python ccdiff/examples/scene_editor.py ... | grep '^\[GRAD\]'
+# nonzero_rows 必须与 available_idx 相交
