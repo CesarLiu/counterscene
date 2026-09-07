@@ -25,6 +25,7 @@ class CCDiffHybridPolicyControl(Policy):
     def __init__(self, device):
         super(CCDiffHybridPolicyControl, self).__init__(device)
         self.controllable_set = [0, 1]
+        self.replay_set = []
 
     def eval(self):
         pass
@@ -36,14 +37,35 @@ class CCDiffHybridPolicyControl(Policy):
         assert isinstance(controllable_set, list)
         self.controllable_set = controllable_set
 
+    def set_replay_set(self, replay_set):
+        '''
+        Scene-local agent rows that keep their logged trajectory even after
+        intervention. Used to hold a recorded ego fixed while the world model
+        drives the remaining agents.
+        '''
+        assert isinstance(replay_set, (list, tuple))
+        self.replay_set = list(replay_set)
+
     def add_policy(self, policy):
         self.policy = policy
 
     def _step_controller(self, obs, gt_pos, gt_yaw, **kwargs):
         if len(self.controllable_set) > 0:
             pred = self.policy.get_action(obs, **kwargs)[0].to_dict()
-            gt_pos = pred['positions']
-            gt_yaw = pred['yaws']
+            new_pos = pred['positions']
+            new_yaw = pred['yaws']
+            keep = [i for i in self.replay_set if i < new_pos.shape[0]]
+            if keep:
+                # Hold these agents on their logged trajectory. The overwrite is
+                # at the action level, so the next observation -- and hence the
+                # world model's conditioning for every other agent -- already
+                # reflects the logged rows.
+                new_pos = new_pos.clone()
+                new_yaw = new_yaw.clone()
+                new_pos[keep] = gt_pos[keep].to(new_pos.dtype)
+                new_yaw[keep] = gt_yaw[keep].to(new_yaw.dtype)
+            gt_pos = new_pos
+            gt_yaw = new_yaw
 
         return gt_pos, gt_yaw
 
